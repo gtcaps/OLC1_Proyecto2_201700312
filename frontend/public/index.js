@@ -118,3 +118,9 @@ function abrirArchivo(archivos) {
     document.getElementById("fileInput").value = "";
 
 }
+
+// Botones para descargar
+document.getElementById("descargarPython").addEventListener("click", () => {
+    let i = tabs.findIndex(tab => tab.classList.contains("active"));
+    sendPOSTFilePython(tabs[i].textContent, editors[i].getValue());
+})
