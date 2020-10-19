@@ -1,0 +1,145 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* MENU */
+nav {
+    background: #023859;
+    display: flex;
+    font-family: 'Hind', sans-serif;
+    color: white;
+    padding: 0 100px;
+    justify-content: space-between;
+}
+
+nav span {
+    vertical-align: center;
+    line-height: 1.5;
+    padding: 15px;
+    opacity: .5;  
+}
+
+.menu {
+    display: flex;
+    list-style: none;
+}
+
+.menu-item {
+    margin-right: 1px ;
+    padding: 15px;
+    cursor: pointer;
+    position: relative;
+    width: 150px;
+    color: #fff;
+}
+
+.menu-item:hover {
+    background: #E6344A;
+}
+
+.submenu {
+    list-style: none;
+    border: 1px solid black;
+    display: none;
+    width: 125%;
+}
+
+.menu-item:hover .submenu {
+    display: block;
+    position: absolute;
+    line-height: 1.5;
+    left: 0;
+    top: 100%;
+    border: none;
+    z-index: 100;
+}
+
+.subitem {
+    line-height: 1.5;
+    padding: 10px;
+    background: #011826;
+}
+
+.subitem:hover {
+    background:#E6344A;
+}
+
+/* MAIN */
+main {
+    padding: 40px 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* EDITOR DE CODIGO*/
+.tabs-container {
+    position: relative;
+    width: 50%;
+}
+
+.tabs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tab {
+    border: 1px solid #0E1F26;
+    line-height: 2.5;
+    padding: 0 1em;
+    background: #0E1F26;
+    color: #fff;
+    position: relative;
+    top: 1px;
+    border-bottom: none;
+    cursor: pointer;
+}
+
+.tab.active {
+    background: #03738C;
+    z-index: 20;
+    border: 1px solid #03738C;
+}
+
+.panels {
+    position: relative;
+    z-index: 10;
+}
+
+.panel {
+    position: absolute;
+    left: -1000%;
+    display: none;
+}
+
+.panel.active {
+    position: relative;
+    left: 0;
+    display: block;
+}
+
+/* CONSOLAS */
+.consolas {
+    width: 49%;
+}
+
+.consola {
+    margin-bottom: 15px;
+}
+
+.consola h2 {
+    font-family: 'Hind', sans-serif;
+}
+
+.consola textarea{
+    resize: none;
+    width: 100%;
+    height: 350px;
+    background: #000;
+    color: #fff;
+    padding: 10px;
+}

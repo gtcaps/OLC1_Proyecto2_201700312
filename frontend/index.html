@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translator in Docker</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@500;600&display=swap" rel="stylesheet">
+    <!-- ICONS -->
+    <script src="https://kit.fontawesome.com/315f34a21b.js" crossorigin="anonymous"></script>
+    <!-- CODEMIRROR -->
+    <script src="./codemirror/lib/codemirror.js"></script>
+    <link rel="stylesheet" href="./codemirror/lib/codemirror.css">
+    <script src="./codemirror/mode/clike/clike.js"></script>
+    <link rel="stylesheet" href="codemirror/theme/material-darker.css">
+</head>
+<body>
+    <input type="file" id="fileInput" style="display: none;" onchange="abrirArchivo(this)">
+    <nav>
+        <ul class="menu">
+            <li class="menu-item">Opciones
+                <ul class="submenu">
+                    <li class="subitem" id="abrirDoc">Abrir</li>
+                    <li class="subitem" id="nuevoDoc">Nuevo</li>
+                    <li class="subitem" id="guardarDoc">Guardar</li>
+                </ul>
+            </li>
+            <li class="menu-item">Descargar
+                <ul class="submenu">
+                    <li class="subitem">Python</li>
+                    <li class="subitem">JavaScript</li>
+                    <li class="subitem">Ambos</li>
+                </ul>
+            </li>
+            <li class="menu-item" id="cerrarDoc">Cerrar Pestaña</li>
+        </ul>
+        <span>Aybson Mercado - 201700312</span>
+    </nav>
+
+    <main>
+        <div class="tabs-container">
+            <ul class="tabs" id="tabs">
+                <li class="tab active">File.js</li>
+            </ul>
+            <div class="panels" id="panels">
+                <div class="panel active">
+                    <textarea id="editor"></textarea>
+                </div>
+            </div>
+        </div>
+        <aside class="consolas">
+            <div class="consola">
+                <h2>Consola Python</h2>
+                <textarea id="consolaPython"></textarea>
+            </div>
+            <div class="consola">
+                <h2>Consola JavaScript</h2>
+                <textarea id="consolaPython"></textarea>
+            </div>
+        </aside>
+    </main>
+
+    <script src="./index.js"></script>
+</body>
+</html>
