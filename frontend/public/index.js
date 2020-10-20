@@ -124,3 +124,8 @@ document.getElementById("descargarPython").addEventListener("click", () => {
     let i = tabs.findIndex(tab => tab.classList.contains("active"));
     sendPOSTFilePython(tabs[i].textContent, editors[i].getValue());
 })
+
+document.getElementById("descargarJS").addEventListener("click", () => {
+    let i = tabs.findIndex(tab => tab.classList.contains("active"));
+    sendPOSTFileJS(tabs[i].textContent, editors[i].getValue());
+})

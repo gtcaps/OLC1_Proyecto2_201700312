@@ -6,17 +6,21 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"bytes"
 	"fmt"
 )
 
 type FileJava struct {
 	Name string `json:"name"`
 	Content string `json:"content"`
+	Type string `json:"type"`
 }
 
 var f FileJava
 
-func POSTFile(w http.ResponseWriter, r *http.Request) {
+// PYTHON ============================================
+
+func POSTFilePython(w http.ResponseWriter, r *http.Request) {
 	// var file FileJava
 	req, err := ioutil.ReadAll(r.Body)	
 	if err != nil {
@@ -24,20 +28,75 @@ func POSTFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.Unmarshal(req, &f)
-	fmt.Println(f)
+	// fmt.Println(f)
 
 	// responder al cliente
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(f)
-	
+
+	// Enviar a Node el Archivo
+	Post("3000")
 }
 
-func GETFile(w http.ResponseWriter, r *http.Request) {
+func GETFilePython(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type","application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(f)
 }
+
+func Post(port string)  {
+	fmt.Println("Enviando a Node")
+	jsonReq, err := json.Marshal(f)
+	resp, err := http.Post("http://localhost:" + port +"/"  , "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	defer resp.Body.Close()
+	bodyBytes, _ := ioutil.ReadAll(resp.Body)
+
+	// Convertir respuesta a string
+	// bodyString := string(bodyBytes)
+	// fmt.Println(bodyString)
+	
+	// Convertir respuesta a struct file
+	var fileStruct FileJava
+	json.Unmarshal(bodyBytes, &fileStruct)
+	fmt.Printf("%+v\n", fileStruct)
+}
+//==================================================================================
+
+// JAVASCRIPT====================================
+func POSTFileJS(w http.ResponseWriter, r *http.Request) {
+	// var file FileJava
+	req, err := ioutil.ReadAll(r.Body)	
+	if err != nil {
+		fmt.Fprintf(w, "Insert a valid File")
+	}
+
+	json.Unmarshal(req, &f)
+	// fmt.Println(f)
+
+	// responder al cliente
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(f)
+
+	// Enviar a Node el Archivo
+	Post("6000")
+}
+
+func GETFileJS(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type","application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(f)
+}
+//==================================================================================
+
+
+
+// MAIN ===============================
 
 func main() {
 	fmt.Println("Starting Server")
@@ -55,9 +114,11 @@ func main() {
 	origins := handlers.AllowedOrigins([]string{"*",})
 
 
-	router.Handle("/", http.FileServer(http.Dir("./frontend/public")))
-	router.HandleFunc("/api/file", POSTFile).Methods("POST")
-	router.HandleFunc("/file", GETFile).Methods("GET")
-	http.ListenAndServe(":8080", handlers.CORS(headers, methods, origins)(router))
+	router.HandleFunc("/file/python", POSTFilePython).Methods("POST")
+	router.HandleFunc("/file/python", GETFilePython).Methods("GET")
+	router.HandleFunc("/file/js", POSTFileJS).Methods("POST")
+	router.HandleFunc("/file/js", GETFileJS).Methods("GET")
+	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./public/")))
+	http.ListenAndServe(":8000", handlers.CORS(headers, methods, origins)(router))
 	
 }
