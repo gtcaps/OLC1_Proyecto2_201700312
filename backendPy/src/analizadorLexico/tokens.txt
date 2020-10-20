@@ -1,0 +1,69 @@
+TOKENS
+----------
+
+->IDENTIFICADOR
+
+
+->PALABRA RESERVADA
+    class
+    interface
+    void
+    true
+    false
+    System
+    out
+    println
+    print
+    break
+    continue
+    return
+    main
+    static
+
+-> CADENA
+
+-> {
+-> }
+-> (
+-> )
+-> ,
+-> ;
+-> =
+-> <
+-> >
+-> +
+-> -
+-> *
+-> /
+-> &
+-> |
+-> ^
+-> !
+-> [  
+-> ]
+-> .
+
+
+-> TIPO
+    boolean
+    String
+    char
+    int
+    double
+
+->MODIFICADOR
+    public
+
+->SENTENCIA_REPETICION
+    for
+    while
+    do
+
+->SENTENCIA_CONTROL
+    if
+    else
+    
+-> COMENTARIO UNILINEA
+
+-> COMENTARIO MULTILINEA
+
