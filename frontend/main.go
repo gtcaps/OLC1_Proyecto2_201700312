@@ -10,10 +10,19 @@ import (
 	"fmt"
 )
 
+type Token struct {
+	Tipo int `json:"tipo"`
+	Lexema string `json:"lexema"`
+	Linea int `json:"linea"`
+	Columna int `json:"columna"`
+	TipoString string `json:"tipoString"`
+}
+
 type FileJava struct {
 	Name string `json:"name"`
 	Content string `json:"content"`
 	Type string `json:"type"`
+	Tokens []Token `json:"tokens,omitempty"`
 }
 
 var f FileJava
@@ -30,13 +39,13 @@ func POSTFilePython(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(req, &f)
 	// fmt.Println(f)
 
+	// Enviar a Node el Archivo
+	Post("3000")
+
 	// responder al cliente
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(f)
-
-	// Enviar a Node el Archivo
-	Post("3000")
 }
 
 func GETFilePython(w http.ResponseWriter, r *http.Request) {
@@ -61,11 +70,11 @@ func Post(port string)  {
 	// fmt.Println(bodyString)
 	
 	// Convertir respuesta a struct file
-	var fileStruct FileJava
-	json.Unmarshal(bodyBytes, &fileStruct)
-	fmt.Printf("%+v\n", fileStruct)
+	// var fileStruct FileJava
+	json.Unmarshal(bodyBytes, &f)
+	fmt.Printf("%+v\n", f)
 }
-//==================================================================================
+// //==================================================================================
 
 // JAVASCRIPT====================================
 func POSTFileJS(w http.ResponseWriter, r *http.Request) {

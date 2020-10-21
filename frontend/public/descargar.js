@@ -8,7 +8,14 @@ function sendPOSTFilePython(name, content){
         })
     })
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(data => {
+        let pyShell = document.getElementById("consolaPython");
+        let str = ""
+        data.tokens.forEach(token => {
+            str += `Token: ${token.tipo}       Lexema: ${token.lexema}      Linea: ${token.linea}       Columna: ${token.columna}\n`;
+        });
+        pyShell.innerHTML += str;
+    })
 }
 
 function sendPOSTFileJS(name, content){
@@ -24,8 +31,3 @@ function sendPOSTFileJS(name, content){
     .then(data => console.log(data))
 }
 
-// function getData() {
-//     fetch("https://jsonplaceholder.typicode.com/users")
-//     .then(response => response.json())
-//     .then(data => console.log(data))
-// }
