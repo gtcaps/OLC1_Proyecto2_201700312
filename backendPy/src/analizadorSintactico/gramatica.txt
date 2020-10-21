@@ -1,0 +1,112 @@
+<INICIO> -> <PLANTILLA>
+
+<PLANTILLA> -> public <TIPO_PLANTILLA>
+
+<TIPO_PLANTILLA> -> class id  { <INSTRUCCIONES_CLASE> }
+                  | interface id { <DEFINICION_FUNCIONES> }
+
+
+<INSTRUCCIONES_CLASE> -> <DECLARACION_METODO> <INSTRUCCIONES_CLASE>
+                       | <DECLARACION__VARIABLES> <INSTRUCCIONES_CLASE>
+                       | <ASIGN_LLAMADA> <INSTRUCCIONES_CLASE>
+                       | ε
+
+<DECLARACION_METODO> -> public <METODO>
+
+<METODO> -> static void main (String [] id) { <INSTRUCCIONES> }
+          | <TIPO> id (<LISTA_PARAMETROS>) { <INSTRUCCIONES> }
+
+<TIPO> -> String
+        | int
+        | char
+        | double
+        | boolean
+        | void
+
+<ASIGN_LLAMADA> -> id <CAR>
+                 | ε
+
+<CAR> -> = <EXPRESION>;
+       | ( <LISTA_PARAMETROS> );
+       | ++;
+       | --;
+
+<INSTRUCCIONES> -> <DECLARACION__VARIABLES> <INSTRUCCIONES>
+                 | <IF> <INSTRUCCIONES>
+                 | <FOR> <INSTRUCCIONES>
+                 | <WHILE> <INSTRUCCIONES>
+                 | <DO> <INSTRUCCIONES>
+                 | <IMPRIMIR> <INSTRUCCIONES>
+                 | return <EXPRESION>; <INSTRUCCIONES>
+                 | break;  
+                 | continue;
+                 | ε
+
+<DECLARACION__VARIABLES> -> <TIPO_DATO> id <ASIGNACION> <LISTA_VARIABLES> ;
+<ASIGNACION> -> = <EXPRESION>
+              | ε
+<LISTA_VARIABLES> -> , id <ASIGNACION> <LISTA_VARIABLES>
+                   | ε
+
+<LISTA_PARAMETROS> -> <PARAMETRO> <LISTA_PARAMETROS_P>
+                    | ε
+<PARAMETRO> -> <TIPO_DATO> id
+<LISTA_PARAMETROS_P> -> , <PARAMETRO> <LISTA_PARAMETROS_P>
+                      | ε
+
+<TIPO_DATO> -> int
+             | char
+             | String
+             | double
+             | boolean
+
+
+    
+<IF> -> if ( <EXPRESION> ) { <INSTRUCCIONES> } <ELSE>
+<ELSE> -> else <ELSE_P>
+        | ε
+<ELSE_P> -> <IF>
+          | { INSTRUCCIONES }
+
+<FOR> -> for (<DECLARACION__VARIABLES>; <EXPRESION>; id<INCREMENTO>) { <INSTRUCCIONES> }
+
+<INCREMENTO> -> ++
+              | --
+
+<WHILE> -> while ( <EXPRESION> ) { <INSTRUCCIONES> }
+
+<DO> -> do { INSTRUCCIONES } while (<EXPRESION>);
+
+
+
+<IMPRIMIR> -> System . out . println ( <EXPRESION> ) ; ---
+
+<EXPRESION> -> <E> <LOGICO_RELACIONAL>
+<LOGICO_RELACIONAL> -> && <EXPRESION>
+                     | || <EXPRESION>
+                     | ! <EXPRESION>
+                     | ^ <EXPRESION>
+                     | > <EXPRESION>
+                     | < <EXPRESION>
+                     | >= <EXPRESION>
+                     | <= <EXPRESION>
+                     | == <EXPRESION>
+                     | != <EXPRESION>
+                     | ε
+<E> -> <T> <EP>
+<EP> -> + <T> <EP>
+      | - <T> <EP>
+      | ε
+<T> -> <F> <TP>
+<TP> -> * <F> <TP>
+      | / <F> <TP>
+      | ε
+<F> -> id //<NAME>
+     | numero
+     | cadena
+     | true
+     | false
+     | - <EXPRESION>
+     | ! <EXPRESION>
+     | ( <EXPRESION> )
+                     
