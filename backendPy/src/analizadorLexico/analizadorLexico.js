@@ -19,7 +19,7 @@ module.exports = class Lexico {
         this.estado = 0;
         this.lexema = "";
         this.linea = 1;
-        this.columna = 1;
+        this.columna = 0;
 
     }
 
@@ -48,14 +48,17 @@ module.exports = class Lexico {
 
     analizar(cadena) {
         let cadenaEntrada = cadena + "#";
+        let col = 0;
 
         for(let i = 0; i < cadenaEntrada.length; i++) {
 
-            let caracterActual = cadenaEntrada[i]
+            let caracterActual = cadenaEntrada[i];
+            col++;
             
 
             switch(this.estado){
                 case 0:
+                    this.columna = col;
                     if (this.isLetter(caracterActual) || caracterActual == "_") {
                         this.lexema += caracterActual;
                         this.estado = 1;
@@ -127,7 +130,7 @@ module.exports = class Lexico {
                         this.estado = 5;
                     } else {
                         if (caracterActual == "#" && i == cadena.length ) {
-                            console.log("<<<<<<<<<<<<<<< Fin del Analisis Lexico >>>>>>>>>>>>>>>")
+                            // console.log("<<<<<<<<<<<<<<< Fin del Analisis Lexico >>>>>>>>>>>>>>>")
                         } else if (["\n","\t"," "].includes(caracterActual,0)) {
                             this.estado = 0;
                             this.lexema = "";
@@ -247,6 +250,7 @@ module.exports = class Lexico {
             if (caracterActual == "\n") {
                 this.linea += 1
                 this.columna = 0
+                col = 0
             }
 
         }

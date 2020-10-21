@@ -1,6 +1,7 @@
 const {Router} = require('express');
 const router = Router();
-const AnalizadorLexico = require('../analizadorLexico/analizadorLexico')
+const AnalizadorLexico = require('../analizadorLexico/analizadorLexico');
+const AnalizadorSintactico = require('../analizadorSintactico/analizadorSintactico');
 
 let file = {
     name: "",
@@ -19,8 +20,12 @@ router.post('/', (req, res) => {
         // res.json({...file, "tokens": []});
 
         // Analizador Lexico
-        const analizadorLex = new AnalizadorLexico()
+        const analizadorLex = new AnalizadorLexico();
         analizadorLex.analizar(content)
+        
+        // Analizador Sintactico
+        const analizadorSin = new AnalizadorSintactico();
+        analizadorSin.analizar(analizadorLex.listaTokens);
 
         res.json({...file, "tokens": analizadorLex.listaTokens}); 
     }

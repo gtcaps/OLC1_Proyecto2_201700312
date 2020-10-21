@@ -26,7 +26,7 @@ module.exports = class Token{
                 return "Sentencia Repeticion";
             case TipoToken.SENTENCIA_CONTROL:
                 return "Sentencia Control";
-            case TipoToken.COMENTARIO_MULTILINEA:
+            case TipoToken.COMENTARIO_UNILINEA:
                 return "Comentario Unilinea";
             case TipoToken.COMENTARIO_MULTILINEA:
                 return "Comentario Multilinea";
