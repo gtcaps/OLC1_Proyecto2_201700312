@@ -170,7 +170,7 @@ class AnalizadorSintactico {
     CAR() {
         if (this.comparar(TipoToken.IGUAL)) {
             this.match(TipoToken.IGUAL);
-            // this.EXPRESION();
+            this.EXPRESION();
             this.match(TipoToken.PUNTO_Y_COMA);
         } else if (this.comparar(TipoToken.PARENTESIS_IZQUIERDO)) {
             this.match(TipoToken.PARENTESIS_IZQUIERDO);
@@ -212,7 +212,7 @@ class AnalizadorSintactico {
             this.INSTRUCCIONES();
         } else if (this.tokenActual.lexema == "return") {
             this.match(TipoToken.PALABRA_RESERVADA, "return");
-            // this.EXPRESION();
+            this.EXPRESION();
             this.match(TipoToken.PUNTO_Y_COMA);
             this.INSTRUCCIONES();
         } else if (this.tokenActual.lexema == "break") {
@@ -240,7 +240,7 @@ class AnalizadorSintactico {
     ASIGNACION() {
         if (this.comparar(TipoToken.IGUAL)) {
             this.match(TipoToken.IGUAL);
-            // this.EXPRESION()
+            this.EXPRESION()
         } else {
             // epsilon
         }
@@ -292,7 +292,7 @@ class AnalizadorSintactico {
     IF() {
         this.match(TipoToken.SENTENCIA_CONTROL, "if");
         this.match(TipoToken.PARENTESIS_IZQUIERDO);
-        // this.EXPRESION()
+        this.EXPRESION()
         this.match(TipoToken.PARENTESIS_DERECHO);
         this.match(TipoToken.LLAVE_IZQUIERDA);
         this.INSTRUCCIONES();
@@ -326,7 +326,7 @@ class AnalizadorSintactico {
         this.match(TipoToken.PARENTESIS_IZQUIERDO);
         this.DECLARACION_VARIABLES();
         this.match(TipoToken.PUNTO_Y_COMA);
-        // this.EXPRESION();
+        this.EXPRESION();
         this.match(TipoToken.PUNTO_Y_COMA);
         this.match(TipoToken.IDENTIFICADOR);
         this.INCREMENTO();
@@ -351,7 +351,7 @@ class AnalizadorSintactico {
     WHILE() {
         this.match(TipoToken.SENTENCIA_REPETICION, "while");
         this.match(TipoToken.PARENTESIS_IZQUIERDO);
-        // this.EXPRESION();
+        this.EXPRESION();
         this.match(TipoToken.PARENTESIS_DERECHO);
         this.match(TipoToken.LLAVE_IZQUIERDA);
         this.INSTRUCCIONES();
@@ -365,7 +365,7 @@ class AnalizadorSintactico {
         this.match(TipoToken.LLAVE_DERECHA);
         this.match(TipoToken.SENTENCIA_REPETICION, "while");
         this.match(TipoToken.PARENTESIS_IZQUIERDO);
-        // this.EXPRESION();
+        this.EXPRESION();
         this.match(TipoToken.PARENTESIS_DERECHO);
         this.match(TipoToken.PUNTO_Y_COMA);
     }
@@ -377,13 +377,155 @@ class AnalizadorSintactico {
         this.match(TipoToken.PUNTO);
         this.match(TipoToken.PALABRA_RESERVADA, "println");
         this.match(TipoToken.PARENTESIS_IZQUIERDO);
-        // this.EXPRESION();
+        this.EXPRESION();
         this.match(TipoToken.PARENTESIS_DERECHO);
         this.match(TipoToken.PUNTO_Y_COMA);
     }
 
+    EXPRESION() {
+        this.E();
+        this.LOGICO_RELACIONAL();
+    }
 
+    LOGICO_RELACIONAL() {
+        if (this.comparar(TipoToken.AND)) {
+            this.match(TipoToken.AND);
+            this.match(TipoToken.AND);
+            this.EXPRESION();
+        } else if (this.comparar(TipoToken.OR)) {
+            this.match(TipoToken.OR);
+            this.match(TipoToken.OR);
+            this.EXPRESION();
+        } else if (this.comparar(TipoToken.EXCLAMACION) && TipoToken.IGUAL == this.listaTokens[this.numToken + 1].tipo) {
+            this.match(TipoToken.EXCLAMACION);
+            this.match(TipoToken.IGUAL);
+            this.EXPRESION();
+        } else if (this.comparar(TipoToken.XOR)) {
+            this.match(TipoToken.XOR);
+            this.EXPRESION();
+        } else if (this.comparar(TipoToken.MAYOR) && TipoToken.IGUAL == this.listaTokens[this.numToken + 1].tipo) {
+            this.match(TipoToken.MAYOR);
+            this.match(TipoToken.IGUAL);
+            this.EXPRESION();
+        } else if (this.comparar(TipoToken.MENOR) && TipoToken.IGUAL == this.listaTokens[this.numToken + 1].tipo) {
+            this.match(TipoToken.MENOR);
+            this.match(TipoToken.IGUAL);
+            this.EXPRESION();
+        } else if (this.comparar(TipoToken.MAYOR)) {
+            this.match(TipoToken.MAYOR);
+            this.EXPRESION();
+        } else if (this.comparar(TipoToken.MENOR)) {
+            this.match(TipoToken.MENOR);
+            this.EXPRESION();
+        } else if (this.comparar(TipoToken.IGUAL)) {
+            this.match(TipoToken.IGUAL);
+            this.match(TipoToken.IGUAL);
+            this.EXPRESION();
+        } else if (this.comparar(TipoToken.EXCLAMACION)) {
+            this.match(TipoToken.EXCLAMACION);
+            this.EXPRESION();
+        } else {
+            // epsilon
+        }
+    }
 
+    E() {
+        this.T();
+        this.EP();
+    }
+
+    EP() {
+        if (this.comparar(TipoToken.MAS)) {
+            this.match(TipoToken.MAS);
+            this.T();
+            this.EP();
+        } else if (this.comparar(TipoToken.MENOS)) {
+            this.match(TipoToken.MENOS);
+            this.T();
+            this.EP();
+        } else {
+            // epsilon
+        }
+    }
+
+    T() {
+        this.F();
+        this.TP();
+    }
+
+    TP() {
+        if (this.comparar(TipoToken.POR)) {
+            this.match(TipoToken.POR);
+            this.F();
+            this.TP();
+        } else if (this.comparar(TipoToken.DIVISION)) {
+            this.match(TipoToken.DIVISION);
+            this.F();
+            this.TP();
+        } else {
+            // epsilon
+        }
+    }
+
+    F() {
+        if (this.comparar(TipoToken.IDENTIFICADOR)) {
+            this.NAME();
+        } else if (this.comparar(TipoToken.NUMERO)) {
+            this.match(TipoToken.NUMERO);
+        } else if (this.comparar(TipoToken.CADENA)) {
+            this.match(TipoToken.CADENA)
+        } else if (this.tokenActual.lexema == "true") {
+            this.match(TipoToken.PALABRA_RESERVADA, "true");
+        } else if (this.tokenActual.lexema == "false") {
+            this.match(TipoToken.PALABRA_RESERVADA, "false");
+        } else if (this.comparar(TipoToken.MENOS)) {
+            this.match(TipoToken.MENOS);
+            this.EXPRESION();
+        } else if (this.comparar(TipoToken.EXCLAMACION)) {
+            this.match(TipoToken.EXCLAMACION);
+            this.EXPRESION();
+        } else if (this.comparar(TipoToken.PARENTESIS_IZQUIERDO)) {
+            this.match(TipoToken.PARENTESIS_IZQUIERDO);
+            this.EXPRESION();
+            this.match(TipoToken.PARENTESIS_DERECHO);
+        } else {
+            this.errorSintact();
+        }
+    }
+
+    NAME() {
+        this.match(TipoToken.IDENTIFICADOR);
+        this.NAME_P();
+    }
+
+    NAME_P() {
+        if (this.comparar(TipoToken.PARENTESIS_IZQUIERDO)) {
+            this.match(TipoToken.PARENTESIS_IZQUIERDO);
+            this.LISTA_EXPRESIONES();
+            this.match(TipoToken.PARENTESIS_DERECHO);
+        } else {
+            // epsilon
+        }
+    }
+
+    LISTA_EXPRESIONES() {
+        if (this.comparar(TipoToken.IDENTIFICADOR) || this.comparar(TipoToken.NUMERO) || this.comparar(TipoToken.CADENA || this.tokenActual.lexema == "true"   || this.tokenActual.lexema == "false" || this.comparar(TipoToken.PARENTESIS_IZQUIERDO)) ) {
+            this.EXPRESION();
+            this.LISTA_EXPRESIONES_P();
+        } else {
+            // epsilon
+        }
+    }
+
+    LISTA_EXPRESIONES_P() {
+        if (this.comparar(TipoToken.COMA)) {
+            this.match(TipoToken.COMA);
+            this.EXPRESION();
+            this.LISTA_EXPRESIONES_P();
+        } else {
+            //  epsilon
+        }
+    }
 
 }
 

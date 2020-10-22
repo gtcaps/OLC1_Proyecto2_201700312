@@ -90,7 +90,7 @@
                      | < <EXPRESION>
                      | >= <EXPRESION>
                      | <= <EXPRESION>
-                     | == <EXPRESION>
+                     | = = <EXPRESION>
                      | != <EXPRESION>
                      | ε
 <E> -> <T> <EP>
@@ -109,4 +109,13 @@
      | - <EXPRESION>
      | ! <EXPRESION>
      | ( <EXPRESION> )
+
+<NAME> -> id <NAME_P>
+<NAME_P> -> ( <LISTA_EXPRESIONES> )
+          | ε
+<LISTA_EXPRESIONES> -> <EXPRESION> <LISTA_EXPRESIONES_P>
+                     | ε
+<LISTA_EXPRESIONES_P> -> , <EXPRESION> <LISTA_EXPRESIONES_P>
+                       | ε
+
                      
