@@ -30,7 +30,7 @@ class AnalizadorSintactico {
         } else {
             // Metodo Parea
             if (this.comparar(tipo) && lexema == this.tokenActual.lexema) {
-                console.log(`${lexema} === ${this.tokenActual.lexema}`);
+                // console.log(`${lexema} === ${this.tokenActual.lexema}`);
                 if (this.numToken < this.listaTokens.length - 1) {
                     this.numToken++;
                     this.tokenActual = this.listaTokens[this.numToken]; 
@@ -49,9 +49,9 @@ class AnalizadorSintactico {
         }
     }
 
-    errorSintact() {
+    errorSintact(tkn = "") {
         console.log("Error en token: " + this.numToken);
-        console.log(`<<<Error Sintactico>>> Linea: ${this.tokenActual.linea}   Caracter: ${this.tokenActual.lexema}`)
+        console.log(`<<<Error Sintactico>>> Linea: ${this.tokenActual.linea}   Caracter: ${this.tokenActual.lexema} Se esperaba el token ${tkn}`)
         this.listaErrores.push(`<<<Error Sintactico>>> Linea: ${this.tokenActual.linea}   Caracter: ${this.tokenActual.lexema}`);
         this.errorSintactico = true;
         this.existeError = true;
@@ -207,7 +207,6 @@ class AnalizadorSintactico {
             this.DO();
             this.INSTRUCCIONES();
         } else if (this.tokenActual.lexema == "System") {
-            console.log("RATATAA");
             this.IMPRIMIR();
             this.INSTRUCCIONES();
         } else if (this.tokenActual.lexema == "return") {
