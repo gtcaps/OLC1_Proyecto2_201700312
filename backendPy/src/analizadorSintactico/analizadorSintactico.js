@@ -33,11 +33,11 @@ class AnalizadorSintactico {
                 // console.log(`${lexema} === ${this.tokenActual.lexema}`);
                 if (this.numToken < this.listaTokens.length - 1) {
                     this.numToken++;
-                    this.tokenActual = this.listaTokens[this.numToken]; 
-                    while(((this.comparar(TipoToken.COMENTARIO_UNILINEA)) || (this.comparar(TipoToken.COMENTARIO_UNILINEA))) && this.numToken < this.listaTokens.length - 1) {
+                    this.tokenActual = this.listaTokens[this.numToken];
+                    while((this.comparar(TipoToken.COMENTARIO_MULTILINEA) || this.comparar(TipoToken.COMENTARIO_UNILINEA)) && this.numToken < this.listaTokens.length - 1) {
                         this.numToken++;
                         this.tokenActual = this.listaTokens[this.numToken];
-                    }   
+                    }  
                 }
             } else {
                 console.log("Error en token: " + this.numToken);
@@ -73,7 +73,22 @@ class AnalizadorSintactico {
             this.match(TipoToken.COMENTARIO_UNILINEA);
         }
 
+        // this.PLANTILLA();
+        this.LISTA_PLANTILLAS();
+    }
+
+    LISTA_PLANTILLAS() {
         this.PLANTILLA();
+        this.LISTA_PLANTILLAS_P();
+    }
+
+    LISTA_PLANTILLAS_P() {
+        if (this.comparar(TipoToken.MODIFICADOR)) {
+            this.PLANTILLA();
+            this.LISTA_PLANTILLAS_P();
+        } else {
+            // epsilon
+        }
     }
 
     PLANTILLA() {
@@ -92,11 +107,40 @@ class AnalizadorSintactico {
             this.match(TipoToken.PALABRA_RESERVADA, "interface");
             this.match(TipoToken.IDENTIFICADOR);
             this.match(TipoToken.LLAVE_IZQUIERDA);
-            // this.DEFINICION_FUNCIONES();
+            this.LISTA_FUNCIONES();
             this.match(TipoToken.LLAVE_DERECHA);
         } else {
             this.errorSintact();
         } 
+    }
+
+    LISTA_FUNCIONES() {
+        if (this.comparar(TipoToken.MODIFICADOR)) {
+            this.FUNCION();
+            this.LISTA_FUNCIONES_P();
+        } else {
+            // epsilon
+        }
+        
+    }
+
+    LISTA_FUNCIONES_P() {
+        if (this.comparar(TipoToken.MODIFICADOR)) {
+            this.FUNCION();
+            this.LISTA_FUNCIONES_P();
+        } else {
+            // epsilon
+        }
+    }
+
+    FUNCION() {
+        this.match(TipoToken.MODIFICADOR);
+        this.TIPO();
+        this.match(TipoToken.IDENTIFICADOR);
+        this.match(TipoToken.PARENTESIS_IZQUIERDO);
+        this.LISTA_PARAMETROS();
+        this.match(TipoToken.PARENTESIS_DERECHO);
+        this.match(TipoToken.PUNTO_Y_COMA);
     }
 
     INSTRUCCIONES_CLASE() {
@@ -502,6 +546,12 @@ class AnalizadorSintactico {
             this.match(TipoToken.PARENTESIS_IZQUIERDO);
             this.LISTA_EXPRESIONES();
             this.match(TipoToken.PARENTESIS_DERECHO);
+        } else if (this.comparar(TipoToken.MAS)) {
+            this.match(TipoToken.MAS);
+            this.match(TipoToken.MAS);
+        } else if (this.comparar(TipoToken.MENOS)) {
+            this.match(TipoToken.MENOS);
+            this.match(TipoToken.MENOS);
         } else {
             // epsilon
         }
