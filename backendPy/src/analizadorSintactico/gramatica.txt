@@ -1,10 +1,22 @@
-<INICIO> -> <PLANTILLA>
+<INICIO> -> <LISTA_PLANTILLAS>
 
+<LISTA_PLANTILLAS> -> <PLANTILLA> <LISTA_PLANTILLAS_P>
+
+<LISTA_PLANTILLAS_P> -> <PLANTILLA> <LISTA_PLANTILLAS_P>
+                       | ε                      
+      
 <PLANTILLA> -> public <TIPO_PLANTILLA>
 
 <TIPO_PLANTILLA> -> class id  { <INSTRUCCIONES_CLASE> }
-                  | interface id { <DEFINICION_FUNCIONES> }
+                  | interface id { <LISTA_FUNCIONES> }
 
+<LISTA_FUNCIONES> -> <FUNCION> <LISTA_FUNCIONES_P>
+                  |  ε
+
+<LISTA_FUNCIONES_P> -> <FUNCION> <LISTA_FUNCIONES_P>
+                     | ε
+
+<FUNCION> -> public <TIPO> id ( <LISTA_PARAMETROS> );
 
 <INSTRUCCIONES_CLASE> -> <DECLARACION_METODO> <INSTRUCCIONES_CLASE>
                        | <DECLARACION__VARIABLES> <INSTRUCCIONES_CLASE>
@@ -101,7 +113,7 @@
 <TP> -> * <F> <TP>
       | / <F> <TP>
       | ε
-<F> -> id //<NAME>
+<F> -> <NAME>
      | numero
      | cadena
      | true
@@ -112,6 +124,8 @@
 
 <NAME> -> id <NAME_P>
 <NAME_P> -> ( <LISTA_EXPRESIONES> )
+          | ++;
+          | --;
           | ε
 <LISTA_EXPRESIONES> -> <EXPRESION> <LISTA_EXPRESIONES_P>
                      | ε
