@@ -12,9 +12,14 @@ function sendPOSTFilePython(name, content){
         let pyShell = document.getElementById("consolaPython");
         let str = ""
         data.tokens.forEach(token => {
-            str += `Token: ${token.tipo}       Lexema: ${token.lexema}      Linea: ${token.linea}       Columna: ${token.columna}\n`;
+            if (token.tipoString == "Comentario Unilinea" || token.tipoString == "Comentario Multilinea") {
+                // Comentarios
+            } else {
+                str += `Token: ${token.tipo}       Lexema: ${token.lexema}      Linea: ${token.linea}       Columna: ${token.columna}\n`;
+            }
         });
-        pyShell.innerHTML += str;
+
+        pyShell.innerHTML = str;
     })
 }
 
