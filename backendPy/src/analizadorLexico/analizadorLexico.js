@@ -50,11 +50,17 @@ module.exports = class Lexico {
         let cadenaEntrada = cadena + "#";
         let col = 0;
 
+
         for(let i = 0; i < cadenaEntrada.length; i++) {
 
             let caracterActual = cadenaEntrada[i];
             col++;
-            
+
+            if (caracterActual == "\n") {
+                this.linea += 1
+                this.columna = 0
+                col = 0
+            }
 
             switch(this.estado){
                 case 0:
@@ -247,11 +253,7 @@ module.exports = class Lexico {
 
             }
 
-            if (caracterActual == "\n") {
-                this.linea += 1
-                this.columna = 0
-                col = 0
-            }
+            
 
         }
 

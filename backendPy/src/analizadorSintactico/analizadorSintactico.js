@@ -19,12 +19,16 @@ class AnalizadorSintactico {
     match(tipo, lexema = this.tokenActual.lexema) {
 
         if (this.errorSintactico) {
-            //Modo Panico
-            if (this.numToken < this.listaTokens - 1) {
+            // Modo Panico
+            if (this.numToken < this.listaTokens.length - 1) {
+                console.log("Estoy en modo panico con el token " + this.tokenActual.lexema + " de la linea " + this.tokenActual.linea);
+                
                 this.numToken++;
                 this.tokenActual = this.listaTokens[this.numToken];
-                if (this.tokenActual.tipo  == TipoToken.PUNTO_Y_COMA) {
+
+                if (this.tokenActual.tipo == TipoToken.PUNTO_Y_COMA) {
                     this.errorSintactico = false;
+                    console.log("Me recupere del error con ;")
                 }
             }
         } else {
@@ -40,7 +44,7 @@ class AnalizadorSintactico {
                     }  
                 }
             } else {
-                console.log("Error en token: " + this.numToken);
+                console.log("Error token: " + this.numToken);
                 console.log(`<<<Error Sintactico>>> Linea: ${this.tokenActual.linea}   Caracter: ${this.tokenActual.lexema}`)
                 this.listaErrores.push(`<<<Error Sintactico>>> Linea: ${this.tokenActual.linea}   Caracter: ${this.tokenActual.lexema}`);
                 this.errorSintactico = true;
