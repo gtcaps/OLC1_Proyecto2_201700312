@@ -27,7 +27,12 @@ router.post('/', (req, res) => {
         const analizadorSin = new AnalizadorSintactico();
         analizadorSin.analizar(analizadorLex.listaTokens);
 
-        res.json({...file, "tokens": analizadorLex.listaTokens}); 
+        res.json({...file, 
+            "tokens": analizadorLex.listaTokens,
+            "erroresLexicos": analizadorLex.listaErrores, 
+            "erroresSintacticos": analizadorSin.listaErrores,
+            "bitacoraSintactico": analizadorSin.listaConsola 
+        }); 
     }
 })
 

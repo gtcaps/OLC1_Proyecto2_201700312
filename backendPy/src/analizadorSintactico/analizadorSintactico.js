@@ -8,6 +8,7 @@ class AnalizadorSintactico {
         this.tokenActual  = null;
         this.listaTokens = [];
         this.listaErrores = [];
+        this.listaConsola = [];
         this.existeError = false;
         this.errorSintactico = false;
     }
@@ -17,18 +18,16 @@ class AnalizadorSintactico {
     }
 
     match(tipo, lexema = this.tokenActual.lexema) {
-
         if (this.errorSintactico) {
             // Modo Panico
             if (this.numToken < this.listaTokens.length - 1) {
-                console.log("Estoy en modo panico con el token " + this.tokenActual.lexema + " de la linea " + this.tokenActual.linea);
-                
+                this.listaConsola.push(`[Modo Panico] Token: ${this.tokenActual.lexema} Linea: ${this.tokenActual.linea} `);
                 this.numToken++;
                 this.tokenActual = this.listaTokens[this.numToken];
 
                 if (this.tokenActual.tipo == TipoToken.PUNTO_Y_COMA) {
                     this.errorSintactico = false;
-                    console.log("Me recupere del error con ;")
+                    this.listaConsola.push(`[Modo Panico] RECUPERADO CON ; en la linea ${this.tokenActual.linea}`);
                 }
             }
         } else {
@@ -44,19 +43,19 @@ class AnalizadorSintactico {
                     }  
                 }
             } else {
-                console.log("Error token: " + this.numToken);
-                console.log(`<<<Error Sintactico>>> Linea: ${this.tokenActual.linea}   Caracter: ${this.tokenActual.lexema}`)
-                this.listaErrores.push(`<<<Error Sintactico>>> Linea: ${this.tokenActual.linea}   Caracter: ${this.tokenActual.lexema}`);
-                this.errorSintactico = true;
-                this.existeError = true;
+                this.errorSintact(this.tipoError(tipo));
             }
         }
     }
 
-    errorSintact(tkn = "") {
-        console.log("Error en token: " + this.numToken);
-        console.log(`<<<Error Sintactico>>> Linea: ${this.tokenActual.linea}   Caracter: ${this.tokenActual.lexema} Se esperaba el token ${tkn}`)
-        this.listaErrores.push(`<<<Error Sintactico>>> Linea: ${this.tokenActual.linea}   Caracter: ${this.tokenActual.lexema}`);
+    errorSintact(msg) {
+        // console.log(`<<<Error Sintactico>>> Caracter: ${this.tokenActual.lexema} se esperaba ${this.tipoError(tipo)}`)
+        this.listaConsola.push(`<<<Error Sintactico>>> Se encontro ${this.tokenActual.lexema} y se esperaba ${msg} en la linea ${this.tokenActual.linea - 1}`);
+        this.listaErrores.push({
+            linea: this.tokenActual.linea,
+            columna: this.tokenActual.columna,
+            descripcion: `Se encontro ${this.tokenActual.lexema} y se esperaba ${msg}`
+        });
         this.errorSintactico = true;
         this.existeError = true;
     }
@@ -67,7 +66,12 @@ class AnalizadorSintactico {
         this.numToken = 0;
         this.tokenActual = this.listaTokens[this.numToken];
         this.INICIO();
-        console.log(this.existeError ? "El analisis sintactico es incorrecto" : "El analisis sintactico fue correcto")
+
+        // console.log(this.existeError ? "El analisis sintactico es incorrecto" : "El analisis sintactico fue correcto")
+        this.listaConsola.push(this.existeError ? "El analisis sintactico es incorrecto" : "El analisis sintactico fue correcto");
+        
+        console.log(this.listaErrores);
+        console.log(this.listaConsola);
     }
 
     INICIO() {
@@ -577,6 +581,73 @@ class AnalizadorSintactico {
             this.LISTA_EXPRESIONES_P();
         } else {
             //  epsilon
+        }
+    }
+
+    tipoError(tipo) {
+        switch(tipo){
+            case TipoToken.IDENTIFICADOR:
+                return "Identificador";
+            case TipoToken.PALABRA_RESERVADA:
+                return "Palabra Reservada";
+            case TipoToken.CADENA:
+                return "Cadena";
+            case TipoToken.TIPO:
+                return "Tipo";
+            case TipoToken.MODIFICADOR:
+                return "Modificador";
+            case TipoToken.SENTENCIA_REPETICION:
+                return "Sentencia Repeticion";
+            case TipoToken.SENTENCIA_CONTROL:
+                return "Sentencia Control";
+            case TipoToken.COMENTARIO_UNILINEA:
+                return "Comentario Unilinea";
+            case TipoToken.COMENTARIO_MULTILINEA:
+                return "Comentario Multilinea";
+            case TipoToken.LLAVE_IZQUIERDA:
+                return "{";
+            case TipoToken.LLAVE_DERECHA:
+                return "}";
+            case TipoToken.PARENTESIS_IZQUIERDO:
+                return "(";
+            case TipoToken.PARENTESIS_DERECHO:
+                return ")";
+            case TipoToken.COMA:
+                return ",";
+            case TipoToken.PUNTO_Y_COMA:
+                return ";";
+            case TipoToken.IGUAL:
+                return "=";
+            case TipoToken.MENOR:
+                return "<";
+            case TipoToken.MAYOR:
+                return ">";
+            case TipoToken.MAS:
+                return "+";
+            case TipoToken.MENOS:
+                return "-";
+            case TipoToken.POR:
+                return "*";
+            case TipoToken.DIVISION:
+                return "/";
+            case TipoToken.AND:
+                return "&";
+            case TipoToken.OR:
+                return "|";
+            case TipoToken.XOR:
+                return "^";
+            case TipoToken.EXCLAMACION:
+                return "!";
+            case TipoToken.CORCHETE_IZQUIERDO:
+                return "[";
+            case TipoToken.CORCHETE_DERECHO:
+                return "]";
+            case TipoToken.NUMERO:
+                return "Numero";
+            case TipoToken.PUNTO:
+                return ".";
+            default:
+                return "Error";
         }
     }
 
