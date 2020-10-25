@@ -10,7 +10,9 @@ function sendPOSTFilePython(name, content){
     .then(response => response.json())
     .then(data => {
         let pyShell = document.getElementById("consolaPython");
-        let str = ""
+        let str = "==========================================\nANALISIS LEXICO\n==========================================\n";
+        
+        // IMPRIMIR TOKENS GENERADOS POR EL ANALIZADOR LEXICO EN LA CONSOLA DE PYTHON
         data.tokens.forEach(token => {
             if (token.tipoString == "Comentario Unilinea" || token.tipoString == "Comentario Multilinea") {
                 // Comentarios
@@ -19,7 +21,17 @@ function sendPOSTFilePython(name, content){
             }
         });
 
-        pyShell.innerHTML = str;
+        pyShell.innerHTML = str + "\n\n";
+
+        data.erroresLexicos.forEach(error => {
+            pyShell.innerHTML += `<<Error Lexico>> El caracter ${error.lexema} no pertenece al lenguaje\n`;
+        });
+
+        pyShell.innerHTML += "\n\n\n==========================================\nANALISIS SINTACTICO\n==========================================\n";
+
+        data.bitacoraSintactico.forEach(info => {
+            pyShell.innerHTML += info + "\n";
+        })
     })
 }
 

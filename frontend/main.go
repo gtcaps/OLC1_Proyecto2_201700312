@@ -18,11 +18,20 @@ type Token struct {
 	TipoString string `json:"tipoString"`
 }
 
+type Error struct {
+	Linea int `json:"linea"`
+	Columna int `json:"columna"`
+	Descripcion string `json:"descripcion"`
+}
+
 type FileJava struct {
 	Name string `json:"name"`
 	Content string `json:"content"`
 	Type string `json:"type"`
 	Tokens []Token `json:"tokens,omitempty"`
+	ErroresLexicos []Token `json:"erroresLexicos"`
+	ErroresSintacticos []Error `json:"erroresSintacticos"`
+	BitacoraSintactico []string `json:"bitacoraSintactico"`
 }
 
 var f FileJava
