@@ -9,6 +9,8 @@ function sendPOSTFilePython(name, content){
     })
     .then(response => response.json())
     .then(data => {
+        console.log(data);
+
         let pyShell = document.getElementById("consolaPython");
         let str = "==========================================\nANALISIS LEXICO\n==========================================\n";
         
@@ -32,7 +34,12 @@ function sendPOSTFilePython(name, content){
         data.bitacoraSintactico.forEach(info => {
             pyShell.innerHTML += info + "\n";
         })
+
+        // DESCARGAR TRADUCCION DEL ARCHIVO
+        descargarArchivo(data.traduccion);
     })
+
+    
 }
 
 function sendPOSTFileJS(name, content){
@@ -48,3 +55,14 @@ function sendPOSTFileJS(name, content){
     .then(data => console.log(data))
 }
 
+
+function descargarArchivo(contenido){
+    let nombreArchivo = "traduccion.py";
+
+    let blob = new Blob([contenido], {type: "text/plain"});
+    let url = window.URL.createObjectURL(blob);
+    let a = document.createElement("a");
+    a.href = url;
+    a.download = nombreArchivo;
+    a.click();
+}

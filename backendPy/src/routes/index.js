@@ -31,7 +31,9 @@ router.post('/', (req, res) => {
             "tokens": analizadorLex.listaTokens,
             "erroresLexicos": analizadorLex.listaErrores, 
             "erroresSintacticos": analizadorSin.listaErrores,
-            "bitacoraSintactico": analizadorSin.listaConsola 
+            "bitacoraSintactico": analizadorSin.listaConsola,
+            "traduccion": analizadorSin.traduccion,
+            "arbol": analizadorSin.arbolGraphviz 
         }); 
     }
 })

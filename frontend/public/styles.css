@@ -35,6 +35,15 @@ nav span {
     color: #fff;
 }
 
+.menu-item a{
+    text-decoration: none;
+    color: #fff;
+}
+
+.menu-item.disabled{
+    display: none;
+}
+
 .menu-item:hover {
     background: #E6344A;
 }

@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"bytes"
 	"fmt"
+	"os"
+	"os/exec"
 )
 
 type Token struct {
@@ -28,13 +30,75 @@ type FileJava struct {
 	Name string `json:"name"`
 	Content string `json:"content"`
 	Type string `json:"type"`
-	Tokens []Token `json:"tokens,omitempty"`
+	Tokens []Token `json:"tokens"`
 	ErroresLexicos []Token `json:"erroresLexicos"`
 	ErroresSintacticos []Error `json:"erroresSintacticos"`
 	BitacoraSintactico []string `json:"bitacoraSintactico"`
+	Traduccion string `json:"traduccion"`
+	Arbol string `json:"arbol"` 
+
 }
 
 var f FileJava
+
+// CREAR REPORTE
+func crearArchivo() {
+	var ruta = "./public/reportes/reportesPy/arbol.dot"
+
+	// Creo el directorio por si no existe
+	err := os.Mkdir("./public/reportes/reportesPy", 0755)
+	if err != nil {
+		fmt.Println("No se pudo crear la ruta")
+	}
+
+	_, err = os.Stat(ruta)
+	if os.IsNotExist(err) {
+		var archivo, err = os.Create(ruta)
+		if err != nil {
+			fmt.Println("No se pudo crear la ruta")
+		}
+		
+		_, err  = archivo.WriteString(f.Arbol)
+		if err != nil {
+			fmt.Println("No se pudo escribir en el archivo")
+		}
+
+		err = archivo.Sync()
+		if err != nil {
+			return
+		}
+
+		defer archivo.Close()
+		fmt.Println("Archivo creado");
+
+		
+
+	} else {
+		var archivo, err = os.OpenFile(ruta, os.O_RDWR, 0644)
+		if err != nil {
+			fmt.Println("No se pudo abrir el archivo")
+		}
+
+		defer archivo.Close()
+
+		_, err = archivo.WriteString(f.Arbol)
+		if err != nil {
+			fmt.Println("No se pudo escribir en el archivo")
+		}
+
+		err = archivo.Sync()
+		if err != nil {
+			fmt.Println("No se pudo guardar los cambios")
+		}
+		fmt.Println("Archivo editado");
+	}
+
+	err = exec.Command("cmd", "/c", "dot -Tpng ./public/reportes/reportesPy/arbol.dot -o ./public/reportes/reportesPy/arbol.png").Run()
+	if err != nil {
+	}
+
+	
+}
 
 // PYTHON ============================================
 
@@ -55,6 +119,8 @@ func POSTFilePython(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(f)
+
+	crearArchivo()
 }
 
 func GETFilePython(w http.ResponseWriter, r *http.Request) {
@@ -117,6 +183,7 @@ func GETFileJS(w http.ResponseWriter, r *http.Request) {
 // MAIN ===============================
 
 func main() {
+
 	fmt.Println("Starting Server")
 
 	router := mux.NewRouter().StrictSlash(false)
