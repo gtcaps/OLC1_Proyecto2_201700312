@@ -52,7 +52,23 @@ function sendPOSTFileJS(name, content){
         })
     })
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(data => {
+
+        let jsShell = document.getElementById("consolaJS");
+        let str = "==========================================\nANALISIS LEXICO\n==========================================\n";
+        
+        data.tokens.forEach(token => {
+            if (token.tipo == "Comentario" || token.tipo == "Comentario Multilinea") {
+                // Comentarios
+            } else {
+                str += `Token: ${token.tipo}       Lexema: ${token.lexema}      Linea: ${token.linea}       Columna: ${token.columna}\n`;
+            }
+        });
+
+        jsShell.innerHTML = str + "\n\n";
+    
+    
+    })
 }
 
 

@@ -129,7 +129,8 @@ document.getElementById("descargarPython").addEventListener("click", () => {
 
 document.getElementById("descargarJS").addEventListener("click", () => {
     let i = tabs.findIndex(tab => tab.classList.contains("active"));
-    // sendPOSTFileJS(tabs[i].textContent, editors[i].getValue());
+    sendPOSTFileJS(tabs[i].textContent, editors[i].getValue());
+    
     document.getElementById("reportesJS").classList.remove("disabled");
     document.getElementById("reportesPy").classList.add("disabled");
 })
