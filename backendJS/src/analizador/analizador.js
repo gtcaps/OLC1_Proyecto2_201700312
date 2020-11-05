@@ -159,6 +159,8 @@ case 11:
 
 
                     traduccion = "class " + $$[$0-3] + "{ \n";
+                    traduccion += "    constructor(){\n"
+                    traduccion += "    }\n\n"
                     if ($$[$0-1]) {
                         this.$.agregarHijo($$[$0-1].nodo);
                         $$[$0-1].traduccion.split("\n").forEach(linea => {

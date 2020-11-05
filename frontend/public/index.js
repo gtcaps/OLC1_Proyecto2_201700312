@@ -130,7 +130,7 @@ document.getElementById("descargarPython").addEventListener("click", () => {
 document.getElementById("descargarJS").addEventListener("click", () => {
     let i = tabs.findIndex(tab => tab.classList.contains("active"));
     sendPOSTFileJS(tabs[i].textContent, editors[i].getValue());
-    
+
     document.getElementById("reportesJS").classList.remove("disabled");
     document.getElementById("reportesPy").classList.add("disabled");
 })
@@ -138,7 +138,14 @@ document.getElementById("descargarJS").addEventListener("click", () => {
 document.getElementById("descargarAmbos").addEventListener("click", () => {
     let i = tabs.findIndex(tab => tab.classList.contains("active"));
 
+    alert("HOLA");
+
     // sendPOSTFilePython(tabs[i].textContent, editors[i].getValue());
+    console.log("TRADUCCION A PYTHON");
+
+    setInterval(() => {
+        console.log("TRADUCCION A JS");
+    },2000);
     // sendPOSTFileJS(tabs[i].textContent, editors[i].getValue());
 
     document.getElementById("reportesJS").classList.remove("disabled");

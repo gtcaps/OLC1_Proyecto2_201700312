@@ -223,6 +223,8 @@ TIPO_PLANTILA: tk_class tk_identificador tk_llave_izq INSTRUCCIONES_CLASE tk_lla
 
 
                     traduccion = "class " + $2 + "{ \n";
+                    traduccion += "    constructor(){\n"
+                    traduccion += "    }\n\n"
                     if ($4) {
                         $$.agregarHijo($4.nodo);
                         $4.traduccion.split("\n").forEach(linea => {

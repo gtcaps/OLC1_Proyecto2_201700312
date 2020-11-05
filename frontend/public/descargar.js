@@ -36,7 +36,7 @@ function sendPOSTFilePython(name, content){
         })
 
         // DESCARGAR TRADUCCION DEL ARCHIVO
-        descargarArchivo(data.traduccion);
+        descargarArchivo(data.traduccion,"py");
     })
 
     
@@ -66,14 +66,24 @@ function sendPOSTFileJS(name, content){
         });
 
         jsShell.innerHTML = str + "\n\n";
-    
+        jsShell.innerHTML += "\n\n\n==========================================\nERRORES\n==========================================\n";
+        
+        if (data.errores.length > 0) {
+            data.errores.forEach(error => {
+                jsShell.innerHTML += `<<${error.tipo}>> ${error.lexema}     Linea: ${error.linea}       Columna: ${error.columna}\n`;
+            });
+        } else {
+            jsShell.innerHTML += `<< Sin Errores Lexicos ni Sintacticos>>\n`;
+        }
+        
+        descargarArchivo(data.traduccion, "js");
     
     })
 }
 
 
-function descargarArchivo(contenido){
-    let nombreArchivo = "traduccion.py";
+function descargarArchivo(contenido, extension){
+    let nombreArchivo = "traduccion." + extension;
 
     let blob = new Blob([contenido], {type: "text/plain"});
     let url = window.URL.createObjectURL(blob);
