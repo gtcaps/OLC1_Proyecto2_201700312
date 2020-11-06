@@ -33,3 +33,5 @@ La interfaz grafica de la aplicación se compone de una sola vista, la cual cuen
     * Python: Permite realizar la ejecución de la traducción del archivo java a Python.
     * JavaScript: Permite realizar la ejecución de la traducción del archivo java a JavaScript.
     * Ambos: Permite realizar la ejecución de la traducción del archivo java a Python y JavaScript.
+
+* **Menú Cerrar Pestaña**: Cierra el editor seleccionado en la pestaña actual.
