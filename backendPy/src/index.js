@@ -3,7 +3,8 @@ const app = express();
 const morgan = require('morgan');
 
 // Configuraciones
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PYPORT || 3000);
+app.set('ip', process.env.PYIP || "192.168.0.5")
 app.set('json spaces', 2);
 
 // CORS

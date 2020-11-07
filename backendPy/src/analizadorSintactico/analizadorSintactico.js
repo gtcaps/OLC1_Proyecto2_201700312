@@ -1275,6 +1275,11 @@ class AnalizadorSintactico {
             nodo.agregarHijo(new Nodo("CADENA", this.tokenActual.lexema.replace(/"/g,"\\\"")));
             str += `${this.tokenActual.lexema}`
             str += this.match(TipoToken.CADENA)
+        
+        } else if (this.comparar(TipoToken.CARACTER) ) {
+            nodo.agregarHijo(new Nodo("CARACTER", this.tokenActual.lexema.replace(/'/g,"\\\"")));
+            str += `${this.tokenActual.lexema}`
+            str += this.match(TipoToken.CARACTER)
 
         } else if (this.tokenActual.lexema == "true" ) {
             nodo.agregarHijo(new Nodo("true", this.tokenActual.lexema));

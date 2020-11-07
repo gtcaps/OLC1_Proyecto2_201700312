@@ -1,0 +1,61 @@
+version: "3"
+
+services:
+    frontend:
+        container_name: go-app
+        image: gtcaps/go-api-web-compi
+        ports:
+            - "8000:8000"
+        environment: 
+            - GOIP=192.168.0.7
+            - GOPORT=8000
+            - JSIP=192.168.0.9
+            - JSPORT=4000
+            - PYIP=192.168.0.5
+            - PYPORT=3000
+        volumes: 
+            - ./frontend:/app/
+        networks: 
+            testing_net:
+                ipv4_address: 192.168.0.7
+        depends_on: 
+            - backendpy
+    
+    
+    backendpy:
+        container_name: py-app
+        image: gtcaps/py-api-compi
+        ports:
+            - "3000:3000"
+        environment: 
+            - PYIP=192.168.0.5
+            - PYPORT=3000
+        volumes: 
+            - ./backendPy:/app/
+            - ./app/node_Modules
+        networks: 
+            testing_net:
+                ipv4_address: 192.168.0.5
+
+    backendjs:
+        container_name: js-app
+        image: gtcaps/js-api-compi
+        ports:
+            - "4000:4000"
+        environment: 
+            - JSIP=192.168.9
+            - JSPORT=4000
+        volumes:
+            - ./backendJS:/app/
+            - ./app/node_Modules
+        networks: 
+            testing_net:
+                ipv4_address: 192.168.0.9
+
+networks: 
+    testing_net:
+        driver: bridge
+        ipam: 
+            config: 
+                - subnet: "192.168.0.0/24"
+                  gateway: "192.168.0.1"

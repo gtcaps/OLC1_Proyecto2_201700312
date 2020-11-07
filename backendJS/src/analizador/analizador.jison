@@ -1,5 +1,5 @@
 %{
-    const Token = require('./token');
+    const Token = require('./Token');
     const Nodo = require('./Nodo');
     let listaTokens = [];
     let listaErrores = [];

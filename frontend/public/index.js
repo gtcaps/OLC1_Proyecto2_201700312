@@ -138,15 +138,11 @@ document.getElementById("descargarJS").addEventListener("click", () => {
 document.getElementById("descargarAmbos").addEventListener("click", () => {
     let i = tabs.findIndex(tab => tab.classList.contains("active"));
 
-    alert("HOLA");
-
-    // sendPOSTFilePython(tabs[i].textContent, editors[i].getValue());
-    console.log("TRADUCCION A PYTHON");
-
+    sendPOSTFilePython(tabs[i].textContent, editors[i].getValue());
+    
     setInterval(() => {
-        console.log("TRADUCCION A JS");
+        sendPOSTFileJS(tabs[i].textContent, editors[i].getValue());
     },2000);
-    // sendPOSTFileJS(tabs[i].textContent, editors[i].getValue());
 
     document.getElementById("reportesJS").classList.remove("disabled");
     document.getElementById("reportesPy").classList.remove("disabled");

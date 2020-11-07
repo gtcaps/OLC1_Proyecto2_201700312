@@ -91,28 +91,24 @@ func crearArchivo() {
 
 		
 
-	} else {
-		var archivo, err = os.OpenFile(ruta, os.O_RDWR, 0644)
-		if err != nil {
-			fmt.Println("No se pudo abrir el archivo")
-		}
+	} 
 
-		defer archivo.Close()
-
-		_, err = archivo.WriteString(f.Arbol)
-		if err != nil {
-			fmt.Println("No se pudo escribir en el archivo")
-		}
-
-		err = archivo.Sync()
-		if err != nil {
-			fmt.Println("No se pudo guardar los cambios")
-		}
-		fmt.Println("Archivo editado");
+	err = os.Remove("./public/reportes/reportesPy/arbol.png");
+	if err != nil {
+		fmt.Println("Error al eliminar el .png");
 	}
 
-	err = exec.Command("cmd", "/c", "dot -Tpng ./public/reportes/reportesPy/arbol.dot -o ./public/reportes/reportesPy/arbol.png").Run()
+	out, err := exec.Command("dot","-Tpng","./public/reportes/reportesPy/arbol.dot","-o","./public/reportes/reportesPy/arbol.png").Output();
 	if err != nil {
+		fmt.Println("No pude ejecutar el comando")
+	}
+
+	fmt.Println("--->" + string(out));
+
+	//ELIMINAR EL ARCHIVO .DOT
+	err = os.Remove(ruta);
+	if err != nil {
+		fmt.Println("Error al eliminar el .dot");
 	}
 
 	
@@ -148,9 +144,11 @@ func GETFilePython(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostPython(port string)  {
-	fmt.Println("Enviando a Node")
+	var url = nodeURL_py + "/"
+
+	fmt.Println("Enviando a Node Python")
 	jsonReq, err := json.Marshal(f)
-	resp, err := http.Post("http://localhost:" + port +"/"  , "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
+	resp, err := http.Post(url , "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -197,9 +195,11 @@ func GETFileJS(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostJS(port string)  {
+	var url = nodeURL_js + "/"
+
 	fmt.Println("Enviando a Node")
 	jsonReq, err := json.Marshal(fjs)
-	resp, err := http.Post("http://localhost:" + port +"/"  , "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
+	resp, err := http.Post(url , "application/json; charset=utf-8", bytes.NewBuffer(jsonReq))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -247,33 +247,31 @@ func crearArchivoJS() {
 		defer archivo.Close()
 		fmt.Println("Archivo creado");
 
-		
 
-	} else {
-		var archivo, err = os.OpenFile(ruta, os.O_RDWR, 0644)
-		if err != nil {
-			fmt.Println("No se pudo abrir el archivo")
-		}
+	} 
 
-		defer archivo.Close()
+	// err = exec.Command("cmd", "/c", "dot -Tpng ./public/reportes/reportesJS/arbol.dot -o ./public/reportes/reportesJS/arbol.png").Run()
+	// if err != nil {
+	// }
 
-		_, err = archivo.WriteString(fjs.Arbol)
-		if err != nil {
-			fmt.Println("No se pudo escribir en el archivo")
-		}
-
-		err = archivo.Sync()
-		if err != nil {
-			fmt.Println("No se pudo guardar los cambios")
-		}
-		fmt.Println("Archivo editado");
-	}
-
-	err = exec.Command("cmd", "/c", "dot -Tpng ./public/reportes/reportesJS/arbol.dot -o ./public/reportes/reportesJS/arbol.png").Run()
+	err = os.Remove("./public/reportes/reportesJS/arbol.png");
 	if err != nil {
+		fmt.Println("Error al eliminar el .png");
 	}
 
-	
+	out, err := exec.Command("dot","-Tpng","./public/reportes/reportesJS/arbol.dot","-o","./public/reportes/reportesJS/arbol.png").Output();
+	if err != nil {
+		fmt.Println("No pude ejecutar el comando")
+	}
+
+	fmt.Println("--->" + string(out));
+
+	//ELIMINAR EL ARCHIVO .DOT
+	err = os.Remove(ruta);
+	if err != nil {
+		fmt.Println("Error al eliminar el .dot");
+	}
+
 }
 //==================================================================================
 
@@ -281,7 +279,52 @@ func crearArchivoJS() {
 
 // MAIN ===============================
 
+
+var nodeURL_py = ""
+var nodeURL_js = ""
+
 func main() {
+
+	// ---------- NODE API PYTHON -----------------
+	pyip, defip := os.LookupEnv("PYIP")
+	pyport, defport := os.LookupEnv("PYPORT")
+
+	if !defip {
+		pyip = "182.168.0.5"
+	}
+
+	if !defport {
+		pyport = "3000"
+	}
+
+	nodeURL_py = "http://" + pyip + ":" + pyport
+
+	// ---------- NODE API JS -----------------
+	jsip, defip := os.LookupEnv("JSIP")
+	jsport, defport := os.LookupEnv("JSPORT")
+
+	if !defip {
+		jsip = "182.168.0.9"
+	}
+
+	if !defport {
+		jsport = "4000"
+	}
+
+	nodeURL_js = "http://" + jsip + ":" + jsport
+
+	// ---------- GO -----------------
+	ip, defip := os.LookupEnv("GOIP")
+	port, defport := os.LookupEnv("GOPORT")
+
+	if !defip {
+		ip = "192.168.0.7"
+	}
+
+	if !defport {
+		port = "8000"
+	}
+
 
 	fmt.Println("Starting Server")
 
@@ -303,6 +346,6 @@ func main() {
 	router.HandleFunc("/file/js", POSTFileJS).Methods("POST")
 	router.HandleFunc("/file/js", GETFileJS).Methods("GET")
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./public/")))
-	http.ListenAndServe(":8000", handlers.CORS(headers, methods, origins)(router))
+	http.ListenAndServe(ip + ":" + port, handlers.CORS(headers, methods, origins)(router))
 	
 }

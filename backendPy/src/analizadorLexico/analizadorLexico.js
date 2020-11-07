@@ -131,13 +131,16 @@ module.exports = class Lexico {
                     } else if (caracterActual == ".") {
                         this.lexema += caracterActual;
                         this.agregarToken(TipoToken.PUNTO);
-                    }else if (caracterActual == "\"") {
+                    } else if (caracterActual == "\"") {
                         this.lexema += caracterActual;
                         this.estado = 5;
+                    } else if (caracterActual == "'") {
+                        this.lexema += caracterActual;
+                        this.estado = 10;
                     } else {
                         if (caracterActual == "#" && i == cadena.length ) {
                             // console.log("<<<<<<<<<<<<<<< Fin del Analisis Lexico >>>>>>>>>>>>>>>")
-                        } else if (["\n","\t"," "].includes(caracterActual,0)) {
+                        } else if (["\n","\t"," ", "\r"].includes(caracterActual,0)) {
                             this.estado = 0;
                             this.lexema = "";
                         } else {
@@ -250,7 +253,15 @@ module.exports = class Lexico {
                         this.estado = 9;
                     }
                     break;
-
+                case 10:
+                    if (caracterActual == "'") {
+                        this.lexema += caracterActual
+                        this.agregarToken(TipoToken.CARACTER);
+                    } else {
+                        this.estado = 10;
+                        this.lexema += caracterActual
+                    }
+                    break;
             }
 
             
