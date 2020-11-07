@@ -49,4 +49,7 @@ Parar un contenedor
 Levantar un contenedor ya existente
 
     docker container -i <ID_CONTENEDOR>
+Ver los logs de un contenedor corriendo
+
+    docker logs -f <ID_CONTENEDOR>
     
